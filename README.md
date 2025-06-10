@@ -6,7 +6,7 @@ ENVS 193DS Final Assignment
 
 Created by Monique Hernandez
 
-A final that focuses on skills in the following: Research writing, Data visualization, Data analysis, and Affective and exploratory visualizations.
+A final that focuses on skills in the following: Research Writing, Data Visualization, Data Analysis, and Affective and Exploratory Visualizations.
 
 # Data and file information
 
