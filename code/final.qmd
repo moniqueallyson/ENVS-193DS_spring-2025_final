@@ -49,20 +49,17 @@ library(tidyverse)
 library(lubridate)
 
 sst_clean <- sst |>                     
-  mutate(                               
-    date = ymd(date),                   # date column is in date format
+  mutate(date = ymd(date),                   # date column is in date format
     year = year(date),                 # year from date
-    month = month(date, label = TRUE)  # extract months
-  ) |>
-  filter(year >= 1982, year <= 2023) |> # Filter year range 1982-2023
+    month = month(date, label = TRUE)) |># extract months
+  filter(year == c("2018", "2019", "2020", "2021", "2022", "2023")) |> # Filter year range 1982-2023
   group_by(year, month) |>             # group by year and month
   summarize(
     mean_monthly_sst = mean(temp, na.rm = TRUE) # average for temperature
   ) |>
   ungroup()
 
-# Display a random sample of 5 rows
-sst_clean |> slice_sample(n = 5)
+sst_clean |> slice_sample(n = 5) # display a random sample of 5 rows
 
 # Show the structure of the cleaned data
 str(sst_clean)
@@ -75,43 +72,31 @@ str(sst_clean)
 ```{r}
 library(ggplot2)
 
-# Filter the data for 2018 to 2023
-sst_clean |> 
-  filter(year >= 2018, year <= 2023)
+sst_visual <- ggplot(data = sst_clean,  # new data called sst_visual
+       aes(x = month, # month on x-axis
+           y = mean_monthly_sst, # year on y-axis
+           group = factor(year), # group by year
+           color = factor(year))) + # color by year
+  geom_line() +                          
+  geom_point() +                         
+  scale_color_manual(name = "Year", # manually assign colors by group
+    values = c("2018" = "#E6E6FA",
+       "2019" = "#D8BFD8",
+       "2020" = "#DDA0DD",
+       "2021" = "#DA70D6",
+       "2022" = "#BA55D3",
+       "2023" = "#8A2BE2")) +
+  labs(x = "Month", # label the title on x-axis
+    y = "Mean Monthly Sea Surface Temperature (°C)") + # label y-axis title
+  theme_minimal() +                             
+  theme(legend.position = c(0.15, 0.65), # position legend lower left
+        plot.background = element_rect(fill = "white"), # background white
+        panel.grid.major = element_blank(),   # remove major grid lines
+        panel.grid.minor = element_blank()) #remove minor grid lines
 
-# custom purple palete for scale color manual
-purple_palette <- c(
-  "2018" = "#E6E6FA",
-  "2019" = "#D8BFD8",
-  "2020" = "#DDA0DD",
-  "2021" = "#DA70D6",
-  "2022" = "#BA55D3",
-  "2023" = "#8A2BE2"
-)
-
-# Plot
-ggplot(sst_subset, aes(x = month, y = mean_monthly_sst, group = factor(year), color = factor(year))) +
-  geom_line(size = 1) +                  # First geom line
-  geom_point(size = 2) +                 # Second geom points
-  scale_color_manual(                   # Use custom purple scale color
-    values = purple_palette,
-    name = "Year"
-  ) +
-  labs(
-    x = "Month", # x axis as month
-    y = "Mean Monthly Sea Surface Temperature (°C)", # y axis as m
-    title = "Monthly Sea Surface Temperature (2018–2023)"
-  ) +
-  theme_minimal() +
-  theme(
-    legend.position = c(0.15, 0.65),     # Inside panel to the left and lowered to avoid blocking
-    panel.border = element_rect(color = "black", fill = NA, size = 1),
-    panel.background = element_rect(fill = "white")
-  )
-
+sst_visual
 
 ```
-
 
 # Problem 3. Data analysis
 
