@@ -121,15 +121,15 @@ sst_visual
 #| label: Cleaning next_boxes data
 
 nest_clean <- nest_boxes |> # clean data
-  clean_names() |>                         # clean column names
-  mutate(season = as.factor(season))      # make season into a factor
+  clean_names() |> # clean column names
+  mutate(season = as.factor(season)) # make season into a factor
 
-nest_explore <- nest_boxes |> 
-  clean_names() |>  # clean the names of columns to remove . and replace with _ 
-  mutate(bin = cut(edge_distance, breaks = 10)) |> 
-  group_by(bin) |> 
+nest_explore <- nest_boxes |>
+  clean_names() |> # clean columns and replace with _ 
+  mutate(bin = cut(edge_distance, breaks = 10)) |>
+  group_by(bin) |>
   mutate(prop_occupied = mean(sp),
-            mid = mean(edge_distance)) |> 
+            mid = mean(edge_distance)) |>
   ungroup() |> 
   mutate(season = factor(season))
 
@@ -211,24 +211,71 @@ plot(residuals4, main = "Model 4: Distance Only Model")
 
 ## g. Select the best model
 
-
 ```{r}
 
 AICc(mod1, # Akaike’s Information Criterion choosing best model
      mod2,
      mod3,
-     mod4) |> # best model
+     mod4) |>
  
   # arranging output in descending order of AIC
   arrange(AICc)
 
 ```
-The best model as determined by Akaike’s Information Criterion (AIC) is the saturated model on season (year) and edge distance to the forest for Swift Parrot's occupancy. This model suggests that the year the nesting occured and the distance influenced whether the Swift Parrots used the boxes.
 
+The best model as determined by Akaike’s Information Criterion (AIC) is the saturated model on season (year) and edge distance to the forest for Swift Parrot's occupancy. This model suggests that the year the nesting occured and the distance influenced whether the Swift Parrots used the boxes.
 
 ## h. Visualize the model predictions
 
+```{r}
+
+# make new object for model predictions
+model_prediction <- ggpredict(mod2, 
+                              terms = c("edge_distance [all]", "season")) # season 2016 and 2019
+
+# convert predictions to a data frame
+model_df <- as.data.frame(model_prediction) |>
+  rename(Season = group)  # rename group column 
+
+# base layer: gg plot
+ggplot(model_df, 
+       aes(x = x,  
+           y = predicted, 
+           color = Season,
+           fill = Season)) +
+  geom_ribbon(aes # add geom ribbon for confidence interval @ 95%
+              (ymin = conf.low,
+                ymax = conf.high),
+              alpha = 0.25, color = NA) +
+  geom_line() +
+  geom_point(size = 1.2) +
+  geom_jitter(data = nest_explore, 
+              aes(x = edge_distance, y = sp, color = season),
+              inherit.aes = FALSE,
+              height = 0.02, 
+              alpha = 0.35,
+              size = 1,
+              shape = 2) +
+  scale_color_manual(values = c("2016" = "violet", "2019" = "purple")) +
+  scale_fill_manual(values = c("2016" = "violet", "2019" = "purple")) +
+  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+  labs(
+    x = "Distance from Forest Edge (m)",
+    y = "Likelihood of Swift Parrot Occupancy",
+    title = "Swift Parrots predicted by Distance and Season"
+  ) +
+
+  theme_bw() +
+  theme(
+    panel.grid.major = element_blank(), # remove grind lines
+    panel.grid.minor = element_blank() # remove minor grind lines
+  )
+
+```
+
 ## i. Write a caption for your figure.
+
+**Figure 1. Swift Parrots have higher likehood for box occupancy when close to forest edge:** 
 
 ## j. Calculate model predictions
 
@@ -238,3 +285,10 @@ The best model as determined by Akaike’s Information Criterion (AIC) is the sa
 
 ## a. Comparing visualizations
 
+It's different because the exploratory visualization shows the jitter plot between two groups and the difference between them while affective shows a plain picture. The latter was not representing the data in a clear way through an artistic expression as it was created initially to do so.
+
+The similarities I see between the two is the up and down motion from the affective visualization referencing the range of chronic pain into a wave or rhythmic motion just as the exploratory has two values being high and low values in th jitter plot.
+
+The relationships are different as the affective doesn't allow for the information to come across neatly like it does for the jitter plot. This could have helped provide more insight by depicting the variables as in when a yoga session was done or not and how it related to the chronic pain felt through that day,
+
+The feedback received through written note was what I mentioned previously how there was not a clear data being represented through the affective visualization as it was done through the exploratory option. At the moment, I would try to implement changes by having perhaps a mountain as then the ocean, despite its turbulent waves, could represent the low pain days when yoga was practiced (a journey itself) versus the heights of the mountains depicting days where I did not practice yoga and experienced high pain, This new ideal attempt reminds me of the famous Japanese painting titled "The Wave".
