@@ -9,8 +9,10 @@ format: html
 
 library(tidyverse)
 library(janitor)
-
-
+library(lubridate)
+library(readr)
+setwd("/Users/moniquehernandez/Desktop/ENVS-193DS/assignment/ENVS-139DS-FINAL/ENVS-193DS_spring-2025_final")
+sst <- read_csv("data/SST_update2023.csv")
 
 
 ```
@@ -39,8 +41,77 @@ Part2: A difference in the average nitrogen load (kg year⁻¹) in the San Joaqu
 
 ## a. Cleaning and summarizing
 
+```{r}
+library(readr)
+sst_clean <- read_csv("/Users/moniquehernandez/Desktop/ENVS-193DS/assignment/ENVS-139DS-FINAL/ENVS-193DS_spring-2025_final/data/SST_update2023.csv")
+
+library(tidyverse)
+library(lubridate)
+
+sst_clean <- sst |>                     
+  mutate(                               
+    date = ymd(date),                   # date column is in date format
+    year = year(date),                 # year from date
+    month = month(date, label = TRUE)  # extract months
+  ) |>
+  filter(year >= 1982, year <= 2023) |> # Filter year range 1982-2023
+  group_by(year, month) |>             # group by year and month
+  summarize(
+    mean_monthly_sst = mean(temp, na.rm = TRUE) # average for temperature
+  ) |>
+  ungroup()
+
+# Display a random sample of 5 rows
+sst_clean |> slice_sample(n = 5)
+
+# Show the structure of the cleaned data
+str(sst_clean)
+
+```
+
 
 ## b. Visualize the data
+
+```{r}
+library(ggplot2)
+
+# Filter the data for 2018 to 2023
+sst_clean |> 
+  filter(year >= 2018, year <= 2023)
+
+# custom purple palete for scale color manual
+purple_palette <- c(
+  "2018" = "#E6E6FA",
+  "2019" = "#D8BFD8",
+  "2020" = "#DDA0DD",
+  "2021" = "#DA70D6",
+  "2022" = "#BA55D3",
+  "2023" = "#8A2BE2"
+)
+
+# Plot
+ggplot(sst_subset, aes(x = month, y = mean_monthly_sst, group = factor(year), color = factor(year))) +
+  geom_line(size = 1) +                  # First geom line
+  geom_point(size = 2) +                 # Second geom points
+  scale_color_manual(                   # Use custom purple scale color
+    values = purple_palette,
+    name = "Year"
+  ) +
+  labs(
+    x = "Month", # x axis as month
+    y = "Mean Monthly Sea Surface Temperature (°C)", # y axis as m
+    title = "Monthly Sea Surface Temperature (2018–2023)"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = c(0.15, 0.65),     # Inside panel to the left and lowered to avoid blocking
+    panel.border = element_rect(color = "black", fill = NA, size = 1),
+    panel.background = element_rect(fill = "white")
+  )
+
+
+```
+
 
 # Problem 3. Data analysis
 
