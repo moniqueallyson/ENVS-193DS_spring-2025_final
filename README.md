@@ -21,4 +21,4 @@ Saleh, Dina and Joseph Domagalski. 2021. “Concentrations, Loads, and Associate
  Stojanovic, Dejan et al. (2021). Do nest boxes breed the target species or its competitors? A case study of a critically endangered bird [Dataset]. Dryad. https://doi.org/10.5061/dryad.83bk3j9sb
 
 # Rendered Output
-[Final Project HTML](https://moniqueallyson.github.io/ENVS-193DS_spring-2025_final/final.html)
+[Final Project HTML](https://moniqueallyson.github.io/ENVS-193DS_spring-2025_final/code/final.html)
