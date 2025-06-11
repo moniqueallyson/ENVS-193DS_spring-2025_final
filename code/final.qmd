@@ -1,0 +1,77 @@
+---
+title: "final"
+format: html
+---
+
+[Github link](https://github.com/moniqueallyson/ENVS-193DS_spring-2025_final)
+
+```{r, message=FALSE}
+
+library(tidyverse)
+library(janitor)
+
+
+
+
+```
+
+# Problem 1. Research writing
+
+## a. Transparent statistical methods
+
+In part 1, they used a correlation test, specifically Pearson's r, since they measured the strength and direction of two variables which in this case are two continuous variables distance from headwater(km) and annual total nitrogen load (kg year^-1^).
+
+In part 2, thy used a one-way ANOVA test because the report compares the average nitrogen load across more than two groups: urban land, atmospheric deposition, fertilizer, wastewater treatment, and grasslands.
+
+## b. More information needed
+
+1. It would be helpful to do a post-hoc test like Tukey's HSD as it can determine which groups are different from each other while the ANOVA test signified that there is a difference in the average nitrogen load (kg year⁻¹) between sources (p = 0.02). The Tukey's HSD will be able to compare the groups to each other (fertilizer vs. grasslands, urban land vs. atmospheric deposition), which will determine which pairs of groups have significantly different mean nitrogen loads.
+2. It could also be helpful to use effect size, such as eta-squared (η²), which measures the proportion of variation explained in nitrogen load (kg year⁻¹) from the five different sources. This means that it quantifies the portion of variance explained by sources. The interpretation for the results can range from negligible (η² \< .01), small (.01 \< η² \< .06), medium (.06 \< η² \< .14), and large (η² \> .14).
+
+## c. Suggestions for rewriting
+
+Part 1: Because we rejected the null hypothesis, we conclude that there is a statistically significant relationship between distance from headwater (km) and annual total nitrogen load (kg year⁻¹).
+(p = 0.03, α = 0.05).
+
+Part2: A difference in the average nitrogen load (kg year⁻¹) in the San Joaquin River Delta was found between the five sources (urban land, atmospheric deposition, fertilizer, wastewater treatment, and grasslands), with an effect size (η² = effect size value) indicating that the proportion of variance explained by source type. This suggests that these sources contribute to variation in nitrogen load in the river delta. (One-way ANOVA; F(4, df₂) = F-value, p = 0.02, α = 0.05)
+
+# Problem 2. Data visualization
+
+## a. Cleaning and summarizing
+
+```{r}
+
+```
+
+
+## b. Visualize the data
+
+# Problem 3. Data analysis
+
+## a. Response variable
+
+## b. Purpose of study
+
+## c. Difference in “seasons”
+
+## d. Table of models
+
+## e. Run the models
+
+## f. Check the diagnostics
+
+## g. Select the best model
+
+## h. Visualize the model predictions
+
+## i. Write a caption for your figure.
+
+## j. Calculate model predictions
+
+## k. Interpret your results
+
+# Problem 4. Affective and exploratory visualizations
+
+## a. Comparing visualizations
+
+## b. Sharing your affective visualization
