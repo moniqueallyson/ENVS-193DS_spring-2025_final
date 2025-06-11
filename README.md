@@ -18,6 +18,7 @@ Kui, L. 2024. Daily sea surface temperature in Santa Barbara channel between 198
 
 Saleh, Dina and Joseph Domagalski. 2021. “Concentrations, Loads, and Associated Trends of Nutrients Entering the Sacramento–San Joaquin Delta, California.” San Francisco Estuary and Watershed Science. DOI: 10.15447/sfews.2021v19iss4art6.
 
+ Stojanovic, Dejan et al. (2021). Do nest boxes breed the target species or its competitors? A case study of a critically endangered bird [Dataset]. Dryad. https://doi.org/10.5061/dryad.83bk3j9sb
 
 # Rendered Output
 [Final Project HTML](https://moniqueallyson.github.io/ENVS-193DS_spring-2025_final/final.html)
