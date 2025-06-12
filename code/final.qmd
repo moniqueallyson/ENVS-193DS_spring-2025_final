@@ -25,6 +25,7 @@ library(DHARMa) # model diagnostics
 library(ggeffects) # getting model predictions
 library(scales) # modifying axis labels
 
+
 # read in your data here
 sst <- read.csv(here("data", "SST_update2023.csv"))
 
@@ -86,7 +87,6 @@ str(sst_clean)
 ## b. Visualize the data
 
 ```{r}
-library(ggplot2)
 
 sst_visual <- ggplot(data = sst_clean,  # new data called sst_visual
        aes(x = month, # month on x-axis
@@ -273,10 +273,6 @@ ggplot(model_df,
 
 ```
 
-
-
-
-
 ## i. Write a caption for your figure.
 
 **Figure 1. Swift Parrots have higher likelihood for box occupancy when close to forest edge:** Extracted data from the DRYAD digital repository (Saunders DL, Mawson PR, Dawson R,2020). Lines show predictions from a saturated generalized linear model with shaded ribbons indicating 95% confidence intervals, differentiated by season through the use of violet for 2016 and purple for 2019. The circular points represent the likelihood of a Swift Parrot occupancy in a nest box according to the distance from the forest edge, while triangular points represent the binary data representing occupancy.
@@ -297,6 +293,6 @@ The relationships are different as the affective doesn't allow for the informati
 
 The feedback received through written note was what I mentioned previously how there was not a clear data being represented through the affective visualization as it was done through the exploratory option. At the moment, I would try to implement changes by having perhaps a mountain as then the ocean, despite its turbulent waves, could represent the low pain days when yoga was practiced (a journey itself) versus the heights of the mountains depicting days where I did not practice yoga and experienced high pain, This new ideal attempt reminds me of the famous Japanese painting titled "The Wave".
 
-b. Sharing your affective visualization
+## b.  Sharing your affective visualization
 
-Workshop 10, I was not present to share my affective visualization though after seeing other classmates I see how I would have changed mine to be more technical rather than artistic. I took the artist approach to visualization too literally. 
+Workshop 10, I was not present to share my affective visualization though after seeing other classmates I see how I would have changed mine to be more technical rather than artistic. I took the artist approach to visualization too literally.
