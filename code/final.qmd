@@ -26,10 +26,10 @@ library(ggeffects) # getting model predictions
 library(scales) # modifying axis labels
 
 
-# read in your data here
+# read in data
 sst <- read.csv(here("data", "SST_update2023.csv"))
 
-# read in your data here
+# read in data
 nest_boxes <-  read.csv(
   # file path
   here("data", "occdist.csv"))
@@ -46,6 +46,8 @@ In part 1, they used a correlation test, specifically Pearson's r, since they me
 In part 2, thy used a one-way ANOVA test because the report compares the average nitrogen load across more than two groups: urban land, atmospheric deposition, fertilizer, wastewater treatment, and grasslands.
 
 ## b. More information needed
+
+From Part 2:
 
 1.  It would be helpful to do a post-hoc test like Tukey's HSD as it can determine which groups are different from each other while the ANOVA test signified that there is a difference in the average nitrogen load (kg year⁻¹) between sources (p = 0.02). The Tukey's HSD will be able to compare the groups to each other (fertilizer vs. grasslands, urban land vs. atmospheric deposition), which will determine which pairs of groups have significantly different mean nitrogen loads.
 
@@ -170,19 +172,19 @@ Due to a mass flowering event, the summers of 2016 and 2019 were the focus for s
 ```{r}
 
 
-mod1 <-  glm(sp ~ 1, # null model
+model1 <-  glm(sp ~ 1, # null model
                    data = nest_clean,
                    family = "binomial") 
 
-mod2 <-  glm(sp ~ season + edge_distance, # season + distance
+model2 <-  glm(sp ~ season + edge_distance, # season + distance
              data = nest_clean,
              family = "binomial")
 
-mod3 <- glm(sp ~ season, # season
+model3 <- glm(sp ~ season, # season
             data = nest_clean,
             family = "binomial")
 
-mod4 <-  glm(sp ~ edge_distance, # distance
+model4 <-  glm(sp ~ edge_distance, # distance
              data = nest_clean,
              family = "binomial")
 
@@ -194,10 +196,10 @@ mod4 <-  glm(sp ~ edge_distance, # distance
 ```{r}
 
 # simulate residuals for each model
-residuals1 <- simulateResiduals(mod1)
-residuals2 <- simulateResiduals(mod2)
-residuals3 <- simulateResiduals(mod3)
-residuals4 <- simulateResiduals(mod4)
+residuals1 <- simulateResiduals(model1)
+residuals2 <- simulateResiduals(model2)
+residuals3 <- simulateResiduals(model3)
+residuals4 <- simulateResiduals(model4)
 
 # plotting diagnostics for each model
 plot(residuals1, main = "Model1: Null Model")
@@ -213,10 +215,10 @@ plot(residuals4, main = "Model 4: Distance Only Model")
 
 ```{r}
 
-AICc(mod1, # Akaike’s Information Criterion choosing best model
-     mod2,
-     mod3,
-     mod4) |>
+AICc(model1, # Akaike’s Information Criterion choosing best model
+     model2,
+     model3,
+     model4) |>
  
   # arranging output in descending order of AIC
   arrange(AICc)
@@ -230,7 +232,7 @@ The best model as determined by Akaike’s Information Criterion (AIC) is the sa
 ```{r}
 
 # make model prediction as new object
-model_prediction <- ggpredict(mod2, 
+model_prediction <- ggpredict(model2, 
                               terms = c("edge_distance [all]", "season")) # breeding season from 2016 and 2019
 
 # convert predictions to a data frame
@@ -275,11 +277,26 @@ ggplot(model_df,
 
 ## i. Write a caption for your figure.
 
-**Figure 1. Swift Parrots have higher likelihood for box occupancy when close to forest edge:** Extracted data from the DRYAD digital repository (Saunders DL, Mawson PR, Dawson R,2020). Lines show predictions from a saturated generalized linear model with shaded ribbons indicating 95% confidence intervals, differentiated by season through the use of violet for 2016 and purple for 2019. The circular points represent the likelihood of a Swift Parrot occupancy in a nest box according to the distance from the forest edge, while triangular points represent the binary data representing occupancy.
+**Figure 1. Swift Parrots have higher likelihood for box occupancy when close to forest edge:** Extracted data from the DRYAD (Saunders DL, Mawson PR, Dawson R,2020 DOI: 10.1111/rec.13319). Lines show predictions from a saturated generalized linear model with shaded ribbons indicating 95% confidence intervals, differentiated by season through the use of violet for 2016 and purple for 2019. The circular points represent the likelihood of a Swift Parrot occupancy in a nest box according to the distance from the forest edge, while triangular points represent the binary data representing occupancy.
 
 ## j. Calculate model predictions
 
+```{r}
+#| echo: true
+
+# predict for 0 m from forest edge with 95% CI
+ggpredict(model2, terms = c("edge_distance [0]", "season"))
+
+
+# predict for 900 m from forest edge with 95% CI
+ggpredict(model2, terms = c("edge_distance [900]", "season"))
+
+
+```
+
 ## k. Interpret your results
+
+Utilizing the figure and prediction results, the Swift Parrot occupancy is highest near the forest edge (0 m) with a 48% occupancy predicted in 2016 and 30% in 2019. Comparing this to 900 m from the forest edge, the predicted occupancy lowers to 12% in 2016 and 6% in 2019 which solidify the inverse relationship between Swift Parrot occupancy and forest distance. As stated in the article's results. from the twenty boxes used in 2016 only five were re-used in 2019. This may be due to the fact that Swift Parrots rarely as stated breed in the same location as the previous year.
 
 # Problem 4. Affective and exploratory visualizations
 
@@ -293,6 +310,6 @@ The relationships are different as the affective doesn't allow for the informati
 
 The feedback received through written note was what I mentioned previously how there was not a clear data being represented through the affective visualization as it was done through the exploratory option. At the moment, I would try to implement changes by having perhaps a mountain as then the ocean, despite its turbulent waves, could represent the low pain days when yoga was practiced (a journey itself) versus the heights of the mountains depicting days where I did not practice yoga and experienced high pain, This new ideal attempt reminds me of the famous Japanese painting titled "The Wave".
 
-## b.  Sharing your affective visualization
+## b. Sharing your affective visualization
 
 Workshop 10, I was not present to share my affective visualization though after seeing other classmates I see how I would have changed mine to be more technical rather than artistic. I took the artist approach to visualization too literally.
