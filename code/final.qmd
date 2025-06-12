@@ -65,7 +65,7 @@ Part 2: A difference in the average nitrogen load (kg year⁻¹) in the San Joaq
 
 ```{r}
 
-sst_clean <- sst |>
+sst_clean <- sst |> 
   mutate(date = ymd(date), # convert date column to Date format
     year = year(date),       # Extract year from date
     month = month(date, label = TRUE)  # Extract month as a labeled factor
@@ -95,8 +95,8 @@ sst_visual <- ggplot(data = sst_clean,  # new data called sst_visual
            y = mean_monthly_sst, # year on y-axis
            group = factor(year), # group by year
            color = factor(year))) + # color by year
-  geom_line() +                          
-  geom_point() +                         
+  geom_line() + # add lines to points
+  geom_point() + # add individual data points
   scale_color_manual(name = "Year", # manually assign colors by group
     values = c("2018" = "#E6E6FA",
        "2019" = "#D8BFD8",
@@ -106,7 +106,7 @@ sst_visual <- ggplot(data = sst_clean,  # new data called sst_visual
        "2023" = "#8A2BE2")) +
   labs(x = "Month", # label the title on x-axis
     y = "Mean Monthly Sea Surface Temperature (°C)") + # label y-axis title
-  theme_minimal() +                             
+  theme_minimal() + # use clean minimal theme
   theme(legend.position = c(0.15, 0.65), # position legend lower left
         plot.background = element_rect(fill = "white"), # background white
         panel.grid.major = element_blank(),   # remove major grid lines
@@ -120,7 +120,6 @@ sst_visual
 
 ```{r}
 #| include: false
-#| label: Cleaning next_boxes data
 
 nest_clean <- nest_boxes |> # clean data
   clean_names() |> # clean column names
@@ -128,20 +127,20 @@ nest_clean <- nest_boxes |> # clean data
 
 nest_explore <- nest_boxes |>
   clean_names() |> # clean columns and replace with _ 
-  mutate(bin = cut(edge_distance, breaks = 10)) |>
-  group_by(bin) |>
-  mutate(prop_occupied = mean(sp),
-            mid = mean(edge_distance)) |>
-  ungroup() |> 
-  mutate(season = factor(season))
-
+  mutate(bin = cut(edge_distance, breaks = 10)) |> # bin edge by distance
+  group_by(bin) |> # group by bin edge distance
+  mutate(
+    prop_occupied = mean(sp), # calculate proportions in occupied bin
+    mid = mean(edge_distance)) |> # find midpoint
+  ungroup() |># remove grouping
+  mutate(season = factor(season)) # convert season to factor
 
 # plot occupancy proportion vs edge distance bins
-ggplot(data = nest_explore,
-       aes(x = mid,
-           y = prop_occupied)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) 
+ggplot(data = nest_explore, # use clean nest_explore
+       aes(x = mid, # x-axis as midpoint
+           y = prop_occupied)) + # y-axis as proportions
+  geom_point() + # add scatter points
+  geom_smooth(method = "lm", se = FALSE) # add line without CI
 
 
 ```
@@ -236,38 +235,39 @@ model_prediction <- ggpredict(model2,
                               terms = c("edge_distance [all]", "season")) # breeding season from 2016 and 2019
 
 # convert predictions to a data frame
-model_df <- as.data.frame(model_prediction) |>
+model_df <- as.data.frame(model_prediction) |> # convert prediction to a data frame
   rename(Season = group)  # rename group column 
 
-# base layer: gg plot
+# base layer: gg plot with prediction data
 ggplot(model_df, 
-       aes(x = x,  
-           y = predicted, 
-           color = Season,
-           fill = Season)) +
+       aes(x = x, # x-axis as edge_distance
+           y = predicted, # y-axis as predicted probability of next box occupancy
+           color = Season, # color by season
+           fill = Season)) + # fill by season
   geom_ribbon(aes # add geom ribbon for confidence interval @ 95%
-              (ymin = conf.low,
-                ymax = conf.high),
-              alpha = 0.25, color = NA) +
-  geom_line() +
-  geom_point(size = 1.2) +
-  geom_jitter(data = nest_explore, 
-              aes(x = edge_distance, y = sp, color = season),
-              inherit.aes = FALSE,
-              height = 0.02, 
-              alpha = 0.35,
-              size = 1,
-              shape = 2) +
-  scale_color_manual(values = c("2016" = "violet", "2019" = "purple")) +
-  scale_fill_manual(values = c("2016" = "violet", "2019" = "purple")) +
-  scale_y_continuous(labels = percent_format(accuracy = 1)) +
+              (ymin = conf.low, # lower bound of 95% CI
+                ymax = conf.high), # upper bound by 95% CI
+              alpha = 0.25, color = NA) + # make ribbons 25% transparent
+  geom_line() + # add prediction line
+  geom_jitter(data = nest_explore, # add binary data points
+              aes(x = edge_distance, # plot observed edge_distance versus sp (occupancy)
+                  y = sp,
+                  color = season), #color by season
+              inherit.aes = FALSE, # refute inherited aesthetics
+              height = 0.02, # jitter height to remain neat
+              alpha = 0.35, # 35% transparent
+              size = 1, # size of data point
+              shape = 2) + # add triangle shape for binary data points
+  scale_color_manual(values = c("2016" = "violet", "2019" = "purple")) + # use custom colors
+  scale_fill_manual(values = c("2016" = "violet", "2019" = "purple")) + # use custom colors
+  scale_y_continuous(labels = percent_format(accuracy = 1)) + # show y-axis as percentage
   labs(
-    x = "Distance from Forest Edge (m)",
-    y = "Likelihood of Swift Parrot Occupancy",
-    title = "Predicting Swift Parrot Nest Box Use by Season"
+    x = "Distance from Forest Edge (m)", # x-axis label
+    y = "Likelihood of Swift Parrot Occupancy", # y-axis label
+    title = "Predicting Swift Parrot Nest Box Use by Season" # plot title
   ) +
 
-  theme_bw() +
+  theme_bw() + # use black and white theme for a clean look
   theme(
     panel.grid.major = element_blank(), # remove grind lines
     panel.grid.minor = element_blank() # remove minor grind lines

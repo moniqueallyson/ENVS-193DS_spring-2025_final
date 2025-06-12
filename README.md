@@ -23,4 +23,4 @@ Stojanovic, Dejan et al. (2021). Do nest boxes breed the target species or its c
 Saleh, Dina and Joseph Domagalski. 2021. “Concentrations, Loads, and Associated Trends of Nutrients Entering the Sacramento–San Joaquin Delta, California.” San Francisco Estuary and Watershed Science. DOI: 10.15447/sfews.2021v19iss4art6.
 
 # Rendered Output
-[Final Project HTML](https://moniqueallyson.github.io/ENVS-193DS_spring-2025_final/code/final.html)
+[Final Project HTML](https://moniqueallyson.github.io/ENVS-193DS_spring-2025_final/final.html)
